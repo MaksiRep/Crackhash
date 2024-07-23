@@ -1,0 +1,28 @@
+version: "3"
+
+services:
+  manager-service:
+    container_name: manager-service
+    image: manager-service
+    build:
+      context: ./manager
+      dockerfile: /Dockerfile
+    hostname: manager
+    ports:
+      - "8082:8082"
+    networks:
+      - service-net
+  worker-service:
+    container_name: worker-service
+    image: worker-service
+    build:
+      context: ./worker
+      dockerfile: /Dockerfile
+    hostname: worker
+    depends_on:
+      - manager-service
+    networks:
+      - service-net
+networks:
+  service-net:
+    driver: bridge
